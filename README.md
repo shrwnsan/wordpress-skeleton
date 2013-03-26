@@ -5,17 +5,15 @@ Based on [David Winter's writeup](http://davidwinter.me/articles/2012/04/09/inst
 
 ---------------------------------------
 ## To update the base WordPress install files
-Change into the WordPress subrepository:
 
-```cd wp
-git fetch --tags
-git checkout 3.5.1
-```
+Change into the WordPress subrepository.
+    cd wp
+    git fetch --tags
+    git checkout 3.5.1
+
 
 Replace 3.5.1 with the correct and latest version number.
 
-Now commit the changes subrepository version to your main project:
-
-```cd ..
-git commit -m "Update WordPress to version 3.5.1"
-```
+Now commit the changes subrepository version to your main project.
+    cd ..
+    git commit -m "Update WordPress to version 3.5.1"
