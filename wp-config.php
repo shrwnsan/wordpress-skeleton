@@ -33,32 +33,19 @@ define('WP_CONTENT_URL', 'http://' . $server_name . '/wp-content');
 define('WP_DEFAULT_THEME', 'bones');
 
 foreach($environments AS $key => $env){
-
 	if(is_array($env)){
-
 		foreach ($env as $option){
-
 			if(stristr($server_name, $option)){
-
 				define('ENVIRONMENT', $key);
-				
 				break 2;
 			}
-
 		}
-
 	} else {
-
 		if(strstr($server_name, $env)){
-
 			define('ENVIRONMENT', $key);
-
 			break;
-
 		}
-		
 	}
-
 }
 
 // If no environment is set default to production
