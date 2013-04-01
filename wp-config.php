@@ -2,46 +2,140 @@
 /**
  * The base configurations of the WordPress.
  *
- * This file has the following configurations: MySQL settings, Table Prefix,
- * Secret Keys, WordPress Language, and ABSPATH. You can find more information
- * by visiting {@link http://codex.wordpress.org/Editing_wp-config.php Editing
- * wp-config.php} Codex page. You can get the MySQL settings from your web host.
- *
- * This file is used by the wp-config.php creation script during the
- * installation. You don't have to use the web site, you can just copy this file
- * to "wp-config.php" and fill in the values.
+ * This file is a custom version of the wp-config file to help
+ * with setting it up for multiple environments. Inspired by
+ * Leevi Grahams ExpressionEngine Config Bootstrap
+ * (http://ee-garage.com/nsm-config-bootstrap)
  *
  * @package WordPress
+ * @author Abban Dunne @abbandunne
+ * @link http://abandon.ie/wordpress-configuration-for-multiple-environments
  */
 
-/** Config files needed for WP Skeleton
-	Based on http://davidwinter.me/articles/2012/04/09/install-and-manage-wordpress-with-git/ */
-define('WP_SITEURL', 'http://' . $_SERVER['SERVER_NAME'] . '/wp');
-define('WP_HOME',    'http://' . $_SERVER['SERVER_NAME']);
+// Define Environments - may be a string or array of options for an environment
+$environments = array(
+	'local'       => array('.local', 'local.'),
+	'development' => '.dev',
+	'staging'     => 'stage.',
+	'preview'     => 'preview.',
+);
 
-define('WP_CONTENT_DIR', $_SERVER['DOCUMENT_ROOT'] . '/wp-content');
-define('WP_CONTENT_URL', 'http://' . $_SERVER['SERVER_NAME'] . '/wp-content');
+// Get Server name
+$server_name = $_SERVER['SERVER_NAME'];
+$doc_root = $_SERVER['DOCUMENT_ROOT'];
+
+define('WP_SITEURL', 'http://'. $server_name . '/wp');
+define('WP_HOME', 'http://'. $server_name);
+
+define('WP_CONTENT_DIR', $doc_root . '/wp-content');
+define('WP_CONTENT_URL', 'http://' . $server_name . '/wp-content');
 
 define('WP_DEFAULT_THEME', 'bones');
 
-// ** MySQL settings - You can get this info from your web host ** //
-/** The name of the database for WordPress */
-define('DB_NAME', 'database_name_here');
+foreach($environments AS $key => $env){
 
-/** MySQL database username */
-define('DB_USER', 'username_here');
+	if(is_array($env)){
 
-/** MySQL database password */
-define('DB_PASSWORD', 'password_here');
+		foreach ($env as $option){
 
-/** MySQL hostname */
-define('DB_HOST', 'localhost');
+			if(stristr($server_name, $option)){
 
-/** Database Charset to use in creating database tables. */
-define('DB_CHARSET', 'utf8');
+				define('ENVIRONMENT', $key);
+				
+				break 2;
+			}
 
-/** The Database Collate type. Don't change this if in doubt. */
-define('DB_COLLATE', '');
+		}
+
+	} else {
+
+		if(strstr($server_name, $env)){
+
+			define('ENVIRONMENT', $key);
+
+			break;
+
+		}
+		
+	}
+
+}
+
+// If no environment is set default to production
+if(!defined('ENVIRONMENT')) define('ENVIRONMENT', 'production');
+
+// Define different DB connection details depending on environment
+switch(ENVIRONMENT){
+
+	case 'local':
+
+		define('DB_NAME', 'bootstrap');
+		define('DB_USER', 'root');
+		define('DB_PASSWORD', 'root');
+		define('DB_HOST', 'localhost');
+		define('WP_DEBUG', true);
+
+		break;
+
+	case 'development':
+
+		define('DB_NAME', 'bootstrap');
+		define('DB_USER', 'root');
+		define('DB_PASSWORD', 'root');
+		define('DB_HOST', 'localhost');
+		define('WP_DEBUG', true);
+
+		break;
+
+	case 'staging':
+
+		define('DB_NAME', 'database_name_here');
+		define('DB_USER', 'username_here');
+		define('DB_PASSWORD', 'password_here');
+		define('DB_HOST', 'localhost');
+
+		break;
+
+	case 'preview':
+
+		define('DB_NAME', 'database_name_here');
+		define('DB_USER', 'username_here');
+		define('DB_PASSWORD', 'password_here');
+		define('DB_HOST', 'localhost');
+
+		break;
+
+	case 'mobile':
+
+		define('DB_NAME', 'database_name_here');
+		define('DB_USER', 'username_here');
+		define('DB_PASSWORD', 'password_here');
+		define('DB_HOST', 'localhost');
+
+		break;
+
+}
+
+// If batabase isn't defined then it will be defined here.
+// Put the details for your production environment in here.
+if(!defined('DB_NAME'))
+	define('DB_NAME', 'database_name_here');
+
+if(!defined('DB_USER'))
+	define('DB_USER', 'username_here');
+
+if(!defined('DB_PASSWORD'))
+	define('DB_PASSWORD', 'password_here');
+
+if(!defined('DB_HOST'))
+	define('DB_HOST', 'localhost');
+
+if(!defined('DB_CHARSET'))
+	define('DB_CHARSET', 'utf8');
+
+if(!defined('DB_COLLATE'))
+	define('DB_COLLATE', '');
+
 
 /**#@+
  * Authentication Unique Keys and Salts.
@@ -52,14 +146,30 @@ define('DB_COLLATE', '');
  *
  * @since 2.6.0
  */
-define('AUTH_KEY',         'put your unique phrase here');
-define('SECURE_AUTH_KEY',  'put your unique phrase here');
-define('LOGGED_IN_KEY',    'put your unique phrase here');
-define('NONCE_KEY',        'put your unique phrase here');
-define('AUTH_SALT',        'put your unique phrase here');
-define('SECURE_AUTH_SALT', 'put your unique phrase here');
-define('LOGGED_IN_SALT',   'put your unique phrase here');
-define('NONCE_SALT',       'put your unique phrase here');
+
+if(!defined('AUTH_KEY'))
+	define('AUTH_KEY', 'put your unique phrase here');
+
+if(!defined('SECURE_AUTH_KEY'))
+	define('SECURE_AUTH_KEY', 'put your unique phrase here');
+
+if(!defined('LOGGED_IN_KEY'))
+	define('LOGGED_IN_KEY', 'put your unique phrase here');
+
+if(!defined('NONCE_KEY'))
+	define('NONCE_KEY', 'put your unique phrase here');
+
+if(!defined('AUTH_SALT'))
+	define('AUTH_SALT', 'put your unique phrase here');
+
+if(!defined('SECURE_AUTH_SALT'))
+	define('SECURE_AUTH_SALT', 'put your unique phrase here');
+
+if(!defined('LOGGED_IN_SALT'))
+	define('LOGGED_IN_SALT', 'put your unique phrase here');
+
+if(!defined('NONCE_SALT'))
+	define('NONCE_SALT', 'put your unique phrase here');
 
 /**#@-*/
 
@@ -69,7 +179,7 @@ define('NONCE_SALT',       'put your unique phrase here');
  * You can have multiple installations in one database if you give each a unique
  * prefix. Only numbers, letters, and underscores please!
  */
-$table_prefix  = 'wp_';
+if(!isset($table_prefix)) $table_prefix  = 'wp_';
 
 /**
  * WordPress Localized Language, defaults to English.
@@ -79,7 +189,8 @@ $table_prefix  = 'wp_';
  * de_DE.mo to wp-content/languages and set WPLANG to 'de_DE' to enable German
  * language support.
  */
-define('WPLANG', '');
+if(!defined('WPLANG'))
+	define('WPLANG', '');
 
 /**
  * For developers: WordPress debugging mode.
@@ -88,7 +199,8 @@ define('WPLANG', '');
  * It is strongly recommended that plugin and theme developers use WP_DEBUG
  * in their development environments.
  */
-define('WP_DEBUG', false);
+if(!defined('WP_DEBUG'))
+	define('WP_DEBUG', false);
 
 /* That's all, stop editing! Happy blogging. */
 
