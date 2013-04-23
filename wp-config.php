@@ -14,23 +14,14 @@
 
 // Define Environments - may be a string or array of options for an environment
 $environments = array(
-	'local'       => array('.local', 'local.'),
+	'local'       => array('.local', 'local.', '.loc'),
 	'development' => '.dev',
-	'staging'     => 'stage.',
+	'staging'     => array('stage.', 'staging.'),
 	'preview'     => 'preview.',
 );
 
 // Get Server name
 $server_name = $_SERVER['SERVER_NAME'];
-$doc_root = $_SERVER['DOCUMENT_ROOT'];
-
-define('WP_SITEURL', 'http://'. $server_name . '/wp');
-define('WP_HOME', 'http://'. $server_name);
-
-define('WP_CONTENT_DIR', $doc_root . '/wp-content');
-define('WP_CONTENT_URL', 'http://' . $server_name . '/wp-content');
-
-define('WP_DEFAULT_THEME', 'bones');
 
 foreach($environments AS $key => $env){
 	if(is_array($env)){
@@ -61,6 +52,7 @@ switch(ENVIRONMENT){
 		define('DB_PASSWORD', 'root');
 		define('DB_HOST', 'localhost');
 		define('WP_DEBUG', true);
+		define('WP_CACHE', false);
 
 		break;
 
@@ -71,6 +63,7 @@ switch(ENVIRONMENT){
 		define('DB_PASSWORD', 'root');
 		define('DB_HOST', 'localhost');
 		define('WP_DEBUG', true);
+		define('WP_CACHE', false);
 
 		break;
 
@@ -123,6 +116,8 @@ if(!defined('DB_CHARSET'))
 if(!defined('DB_COLLATE'))
 	define('DB_COLLATE', '');
 
+if(!defined('WP_CACHE'))
+	define('WP_CACHE', true);
 
 /**#@+
  * Authentication Unique Keys and Salts.
@@ -188,6 +183,27 @@ if(!defined('WPLANG'))
  */
 if(!defined('WP_DEBUG'))
 	define('WP_DEBUG', false);
+
+/**#@-*/
+
+/**
+* Let's set the common WP General Settings
+*/
+define('WP_SITEURL', 'http://'. $server_name . '/wp');
+define('WP_HOME', 'http://'. $server_name);
+
+/**
+* Set the docroot
+* Flexibility to work with Apache VirtualDocumentRoot when using mod_vhost_alias, which was previously default to DocumentRoot:
+*
+* $doc_root = $_SERVER['DOCUMENT_ROOT'];
+* define('WP_CONTENT_DIR', $doc_root . '/wp-content');
+*/
+define('WP_CONTENT_DIR', dirname(__FILE__) . '/wp-content');
+define('WP_CONTENT_URL', 'http://' . $server_name . '/wp-content');
+
+// Make this the default theme
+define('WP_DEFAULT_THEME', 'bones');
 
 /* That's all, stop editing! Happy blogging. */
 
