@@ -22,10 +22,10 @@ Change into the WordPress subrepository:
 
 	cd wp
 	git fetch --tags
-	git checkout 3.5.1
+	git checkout 3.8
 
 
-Replace 3.5.1 with the correct and latest version number.
+Replace 3.8 with the correct and latest version number.
 
 Now commit the changes subrepository version to your main project:
 
