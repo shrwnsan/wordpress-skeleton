@@ -30,4 +30,4 @@ Replace 3.5.1 with the correct and latest version number.
 Now commit the changes subrepository version to your main project:
 
 	cd ..
-	git commit -m "Update WordPress to version 3.5.1"
+	git commit -m "Update WordPress to version 3.8"
