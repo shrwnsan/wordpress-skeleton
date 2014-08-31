@@ -22,12 +22,12 @@ Change into the WordPress subrepository:
 
 	cd wp
 	git fetch --tags
-	git checkout 3.9.1
+	git checkout 3.9.2
 
 
-Replace 3.9.1 with the correct and latest version number.
+Replace 3.9.2 with the correct and latest version number.
 
 Now commit the changes subrepository version to your main project:
 
 	cd ..
-	git commit -m "Update WordPress to version 3.9.1"
+	git commit -m "Update WordPress to version 3.9.2"
